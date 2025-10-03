@@ -1,0 +1,157 @@
+{
+  "name": "genesisdb-vscode",
+  "displayName": "Genesis DB",
+  "description": "VS Code extension for Genesis DB event sourcing database",
+  "version": "1.0.0",
+  "publisher": "patriceckhart",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/genesisdb-io/genesisdb-io-vscode"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "icon": "resources/icons/genesisdb.png",
+  "categories": [
+    "Other",
+    "Data Science"
+  ],
+  "keywords": [
+    "genesisdb",
+    "event store",
+    "event sourcing",
+    "event sourcing database",
+    "gdbql",
+    "database"
+  ],
+  "activationEvents": [
+    "onCommand:genesisdb.addConnection",
+    "onCommand:genesisdb.removeConnection",
+    "onCommand:genesisdb.testConnection",
+    "onCommand:genesisdb.refreshConnections",
+    "onCommand:genesisdb.openConnectionUI",
+    "onView:genesisdb-connections"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "genesisdb.addConnection",
+        "title": "Add Connection",
+        "category": "Genesis DB",
+        "icon": "$(add)"
+      },
+      {
+        "command": "genesisdb.removeConnection",
+        "title": "Remove Connection",
+        "category": "Genesis DB",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "genesisdb.testConnection",
+        "title": "Test Connection",
+        "category": "Genesis DB",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "genesisdb.refreshConnections",
+        "title": "Refresh Connections",
+        "category": "Genesis DB",
+        "icon": "$(refresh)"
+      }
+    ],
+    "views": {
+      "genesisdb-panel": [
+        {
+          "id": "genesisdb-connections",
+          "name": "Connections",
+          "type": "tree"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "genesisdb-panel",
+          "title": "Genesis DB",
+          "icon": "$(database)"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "genesisdb.addConnection",
+          "when": "view == genesisdb-connections",
+          "group": "navigation"
+        },
+        {
+          "command": "genesisdb.refreshConnections",
+          "when": "view == genesisdb-connections",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "genesisdb.testConnection",
+          "when": "view == genesisdb-connections && viewItem == connection",
+          "group": "inline"
+        },
+        {
+          "command": "genesisdb.removeConnection",
+          "when": "view == genesisdb-connections && viewItem == connection",
+          "group": "inline"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "genesisdb.removeConnection",
+          "when": "false"
+        },
+        {
+          "command": "genesisdb.testConnection",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Genesis DB",
+      "properties": {
+        "genesisdb.connections": {
+          "type": "array",
+          "description": "Genesis DB connection configurations",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Connection name"
+              },
+              "url": {
+                "type": "string",
+                "description": "Genesis DB server URL"
+              },
+              "authToken": {
+                "type": "string",
+                "description": "Authentication token"
+              }
+            }
+          },
+          "default": []
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.1.6",
+    "vsce": "^2.15.0"
+  }
+}
