@@ -113,7 +113,7 @@ async function removeConnection(connectionProvider: ConnectionProvider, item: an
     }
 }
 
-async function testConnection(connectionOrItem: any) {
+async function testConnection(connectionOrItem: any): Promise<boolean> {
     let connection: GenesisDBConnection;
 
     if (connectionOrItem?.connection) {
@@ -122,27 +122,67 @@ async function testConnection(connectionOrItem: any) {
         connection = connectionOrItem;
     } else {
         vscode.window.showErrorMessage('No connection provided');
-        return;
+        return false;
     }
 
     try {
         vscode.window.showInformationMessage(`Testing connection to ${connection.name}...`);
 
+        // Validate URL format first
+        let url: URL;
         try {
-            new URL(connection.url);
-            vscode.window.showInformationMessage(`Connection '${connection.name}' configuration looks valid!`);
+            url = new URL(connection.url);
         } catch {
             vscode.window.showErrorMessage(`Invalid URL format in connection '${connection.name}'`);
+            return false;
+        }
+
+        // Actually test the connection by making a request to the ping endpoint
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+        try {
+            const pingUrl = `${connection.url.replace(/\/$/, '')}/api/v1/status/ping`;
+            const response = await fetch(pingUrl, {
+                method: 'GET',
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+                vscode.window.showInformationMessage(`Connection '${connection.name}' is reachable!`);
+                return true;
+            } else {
+                vscode.window.showErrorMessage(`Connection '${connection.name}' returned status ${response.status}`);
+                return false;
+            }
+        } catch (error: any) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                vscode.window.showErrorMessage(`Connection '${connection.name}' timed out`);
+            } else {
+                vscode.window.showErrorMessage(`Cannot reach '${connection.name}': ${error.message}`);
+            }
+            return false;
         }
 
     } catch (error) {
         vscode.window.showErrorMessage(`Connection test failed: ${error}`);
+        return false;
     }
 }
 
 async function openConnectionUI(connection: GenesisDBConnection, context: vscode.ExtensionContext) {
     if (!connection) {
         vscode.window.showErrorMessage('No connection provided');
+        return;
+    }
+
+    // Test connection before opening UI
+    const isConnected = await testConnection(connection);
+    if (!isConnected) {
+        vscode.window.showErrorMessage(`Cannot open UI: Connection to '${connection.name}' failed. Please check if the database is running and accessible.`);
         return;
     }
 
@@ -177,10 +217,10 @@ async function openConnectionUI(connection: GenesisDBConnection, context: vscode
         '<script type="module"',
         `<script>
             window.genesisConnection = ${JSON.stringify({
-                name: connection.name,
-                host: connection.url,
-                authToken: connection.authToken
-            })};
+            name: connection.name,
+            host: connection.url,
+            authToken: connection.authToken
+        })};
             const vscode = acquireVsCodeApi();
 
             // Simple message handler if React app needs to communicate
@@ -220,4 +260,4 @@ async function openConnectionUI(connection: GenesisDBConnection, context: vscode
     });
 }
 
-export function deactivate() {}
+export function deactivate() { }

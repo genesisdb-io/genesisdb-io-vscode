@@ -2,6 +2,13 @@
 
 All notable changes to the Genesis DB VS Code extension will be documented in this file.
 
+## [1.0.1] - 2025-10-04
+
+### Fixed
+- Connection test now properly validates database connectivity using `/api/v1/status/ping` endpoint
+- UI no longer opens when database connection fails
+- Improved error messages when connection test fails
+
 ## [1.0.0] - 2025-10-03
 
 ### Added
