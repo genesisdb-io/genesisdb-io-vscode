@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Editor from '@monaco-editor/react';
 
 // Type for window.genesisConnection
@@ -137,10 +137,22 @@ function App() {
   const [themeReady, setThemeReady] = useState<boolean>(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>('/api/v1/stream');
   const [leftWidth, setLeftWidth] = useState<number>(50);
+  const [topHeight, setTopHeight] = useState<number>(50);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isWideScreen, setIsWideScreen] = useState<boolean>(window.innerWidth >= 1024);
 
   // Store input and output for each endpoint
   const [endpointContent, setEndpointContent] = useState<Record<string, { input: string; output: string }>>({});
+
+  // Handle responsive layout
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const connection = window.genesisConnection || {
     host: 'http://localhost:8080',
@@ -268,10 +280,19 @@ function App() {
 
     const container = e.currentTarget as HTMLElement;
     const rect = container.getBoundingClientRect();
-    const newLeftWidth = ((e.clientX - rect.left) / rect.width) * 100;
 
-    if (newLeftWidth > 20 && newLeftWidth < 80) {
-      setLeftWidth(newLeftWidth);
+    if (isWideScreen) {
+      // Horizontal dragging for side-by-side layout
+      const newLeftWidth = ((e.clientX - rect.left) / rect.width) * 100;
+      if (newLeftWidth > 20 && newLeftWidth < 80) {
+        setLeftWidth(newLeftWidth);
+      }
+    } else {
+      // Vertical dragging for stacked layout
+      const newTopHeight = ((e.clientY - rect.top) / rect.height) * 100;
+      if (newTopHeight > 20 && newTopHeight < 80) {
+        setTopHeight(newTopHeight);
+      }
     }
   };
 
@@ -303,34 +324,33 @@ function App() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-row items-center justify-between gap-4 p-4 border-b">
-        <div className="flex flex-row gap-1">
-          <Button onClick={() => selectEndpoint('/api/v1/commit')} disabled={loading} variant={selectedEndpoint === '/api/v1/commit' ? 'default' : 'outline'} size="sm">Commit</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/stream')} disabled={loading} variant={selectedEndpoint === '/api/v1/stream' ? 'default' : 'outline'} size="sm">Stream</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/query')} disabled={loading} variant={selectedEndpoint === '/api/v1/query' ? 'default' : 'outline'} size="sm">Query</Button>
-          {/* <Button onClick={() => selectEndpoint('/api/v1/observe')} disabled={loading} variant={selectedEndpoint === '/api/v1/observe' ? 'default' : 'outline'} size="sm">Observe</Button> */}
-          <Button onClick={() => selectEndpoint('/api/v1/erase')} disabled={loading} variant={selectedEndpoint === '/api/v1/erase' ? 'default' : 'outline'} size="sm">Erase</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/schema/register')} disabled={loading} variant={selectedEndpoint === '/api/v1/schema/register' ? 'default' : 'outline'} size="sm">Register Schema</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/schema/get')} disabled={loading} variant={selectedEndpoint === '/api/v1/schema/get' ? 'default' : 'outline'} size="sm">Get Schemas</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/subjects')} disabled={loading} variant={selectedEndpoint === '/api/v1/subjects' ? 'default' : 'outline'} size="sm">Get Subjects</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/types')} disabled={loading} variant={selectedEndpoint === '/api/v1/types' ? 'default' : 'outline'} size="sm">Get Types</Button>
-          <Button onClick={() => selectEndpoint('/api/v1/backup/restore')} disabled={loading} variant={selectedEndpoint === '/api/v1/backup/restore' ? 'default' : 'outline'} size="sm">Restore Backup</Button>
+      <div className="flex flex-row items-center gap-4 p-4 border-b">
+        <div className="flex flex-row gap-1 overflow-x-auto flex-1 scrollbar-thin py-1">
+          <Button onClick={() => selectEndpoint('/api/v1/commit')} disabled={loading} variant={selectedEndpoint === '/api/v1/commit' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Commit</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/stream')} disabled={loading} variant={selectedEndpoint === '/api/v1/stream' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Stream</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/query')} disabled={loading} variant={selectedEndpoint === '/api/v1/query' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Query</Button>
+          {/* <Button onClick={() => selectEndpoint('/api/v1/observe')} disabled={loading} variant={selectedEndpoint === '/api/v1/observe' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Observe</Button> */}
+          <Button onClick={() => selectEndpoint('/api/v1/erase')} disabled={loading} variant={selectedEndpoint === '/api/v1/erase' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Erase</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/schema/register')} disabled={loading} variant={selectedEndpoint === '/api/v1/schema/register' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Register Schema</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/schema/get')} disabled={loading} variant={selectedEndpoint === '/api/v1/schema/get' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Get Schemas</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/subjects')} disabled={loading} variant={selectedEndpoint === '/api/v1/subjects' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Get Subjects</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/types')} disabled={loading} variant={selectedEndpoint === '/api/v1/types' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Get Types</Button>
+          <Button onClick={() => selectEndpoint('/api/v1/backup/restore')} disabled={loading} variant={selectedEndpoint === '/api/v1/backup/restore' ? 'default' : 'outline'} size="sm" className="whitespace-nowrap">Restore Backup</Button>
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row flex-shrink-0">
           <Button onClick={handleSubmit} disabled={loading || !selectedEndpoint} size="sm">Submit</Button>
         </div>
       </div>
 
       {/* Editors */}
       <div
-        className="flex flex-1 overflow-hidden relative"
+        className="flex flex-col lg:flex-row flex-1 overflow-hidden relative"
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
         {/* Input Editor */}
-        <div className="flex flex-col border-r" style={{ width: `${leftWidth}%` }}>
-          <div className="p-2 border-b bg-background text-sm font-semibold">Input</div>
+        <div className="flex flex-col lg:border-r" style={{ width: isWideScreen ? `${leftWidth}%` : '100%', height: isWideScreen ? '100%' : `${topHeight}%` }}>
           <div className="flex-1">
             <Editor
               height="100%"
@@ -353,14 +373,13 @@ function App() {
 
         {/* Draggable Divider */}
         <div
-          className="w-[1px] bg-border hover:bg-primary cursor-col-resize transition-colors"
+          className={isWideScreen ? "w-[2px] bg-border hover:bg-primary cursor-col-resize transition-colors flex-shrink-0" : "h-[3px] bg-border hover:bg-primary cursor-row-resize transition-colors flex-shrink-0"}
           onMouseDown={handleMouseDown}
-          style={{ cursor: 'col-resize' }}
+          style={{ cursor: isWideScreen ? 'col-resize' : 'row-resize', pointerEvents: 'auto', zIndex: 10 }}
         />
 
         {/* Output Editor */}
-        <div className="flex flex-col" style={{ width: `${100 - leftWidth}%` }}>
-          <div className="p-2 border-b bg-background text-sm font-semibold">Output</div>
+        <div className="flex flex-col" style={{ width: isWideScreen ? `${100 - leftWidth}%` : '100%', height: isWideScreen ? '100%' : `${100 - topHeight}%` }}>
           <div className="flex-1">
             <Editor
               height="100%"

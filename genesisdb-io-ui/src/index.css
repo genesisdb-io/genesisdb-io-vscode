@@ -3,6 +3,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+::-webkit-scrollbar { width: 0.20rem; height: 0.20rem; }
+::-webkit-scrollbar-track { @apply bg-background; }
+::-webkit-scrollbar-thumb { @apply bg-primary; }
+::-webkit-scrollbar-thumb:hover { @apply bg-primary; }
+
+::-moz-selection { @apply text-white bg-primary; }
+::selection { @apply text-white bg-primary; }
+.bg-primary {
+  ::-moz-selection { @apply text-primary bg-white; }
+  ::selection { @apply text-primary bg-white; }
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
