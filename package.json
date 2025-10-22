@@ -2,7 +2,7 @@
   "name": "genesisdb-vscode",
   "displayName": "Genesis DB",
   "description": "VS Code extension for Genesis DB event sourcing database",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "patriceckhart",
   "repository": {
     "type": "git",

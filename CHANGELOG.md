@@ -2,6 +2,16 @@
 
 All notable changes to the Genesis DB VS Code extension will be documented in this file.
 
+## [1.0.3] - 2025-10-2
+
+### Fixed
+- Shows ndjson instead of json in the output
+
+## [1.0.2] - 2025-10-13
+
+### Fixed
+- Responsive View optimized
+
 ## [1.0.1] - 2025-10-04
 
 ### Fixed

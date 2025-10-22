@@ -31,7 +31,7 @@ A comprehensive Visual Studio Code extension for Genesis DB, the production-read
 
 Or install from VSIX:
 ```bash
-code --install-extension genesis-db-vscode-1.0.0.vsix
+code --install-extension genesis-db-vscode-1.0.3.vsix
 ```
 
 ## Quick Start

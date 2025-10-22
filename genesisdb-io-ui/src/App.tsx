@@ -202,12 +202,11 @@ function App() {
       // Check if response is NDJSON (newline delimited JSON)
       if (result.includes('\n') && result.trim()) {
         try {
-          // Parse each line as JSON and format
+          // Parse each line as JSON and format individually
           const lines = result.trim().split('\n').filter(line => line.trim());
-          const parsed = lines.map(line => JSON.parse(line));
-
-          // Format as array with 4 space indentation
-          const formatted = JSON.stringify(parsed, null, 4);
+          const formatted = lines
+            .map(line => JSON.stringify(JSON.parse(line), null, 4))
+            .join('\n');
           setOutput(formatted);
         } catch (e) {
           // If NDJSON parsing fails, try regular JSON
