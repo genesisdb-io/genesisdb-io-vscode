@@ -10,7 +10,7 @@ export class ConnectionProvider implements vscode.TreeDataProvider<ConnectionIte
     private _onDidChangeTreeData: vscode.EventEmitter<ConnectionItem | undefined | null | void> = new vscode.EventEmitter<ConnectionItem | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<ConnectionItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
-    constructor() {}
+    constructor() { }
 
     refresh(): void {
         this._onDidChangeTreeData.fire();
@@ -47,7 +47,7 @@ export class ConnectionItem extends vscode.TreeItem {
         // Add command to open UI when clicked
         this.command = {
             command: 'genesisdb.openConnectionUI',
-            title: 'Open Genesis DB Interface',
+            title: 'Open GenesisDB Interface',
             arguments: [connection]
         };
     }

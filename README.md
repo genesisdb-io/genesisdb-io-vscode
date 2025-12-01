@@ -1,11 +1,11 @@
-# Genesis DB VS Code Extension
+# GenesisDB VS Code Extension
 
-A comprehensive Visual Studio Code extension for Genesis DB, the production-ready event sourcing database engine. This extension provides a complete development environment for working with Genesis DB, including connection management.
+A comprehensive Visual Studio Code extension for GenesisDB, the production-ready event sourcing database engine. This extension provides a complete development environment for working with GenesisDB, including connection management.
 
 ## Features
 
 ### Connection Management
-- Manage multiple Genesis DB connections
+- Manage multiple GenesisDB connections
 - Token-based authentication
 - Connection testing
 - Quick connection switching
@@ -26,20 +26,20 @@ A comprehensive Visual Studio Code extension for Genesis DB, the production-read
 
 1. Open VS Code
 2. Go to Extensions (Ctrl+Shift+X)
-3. Search for "Genesis DB"
+3. Search for "GenesisDB"
 4. Click Install
 
 Or install from VSIX:
 ```bash
-code --install-extension genesis-db-vscode-1.0.3.vsix
+code --install-extension genesis-db-vscode-1.0.4.vsix
 ```
 
 ## Quick Start
 
 1. **Add a Connection**
-   - Open the Genesis DB panel in the Activity Bar
+   - Open the GenesisDB panel in the Activity Bar
    - Click "Add Connection" in the Connections view
-   - Enter your Genesis DB URL and authentication token
+   - Enter your GenesisDB URL and authentication token
 
 ## Manual Configuration
 
@@ -61,14 +61,14 @@ Configure the extension in VS Code settings:
 
 The extension provides these commands (accessible via Command Palette):
 
-- `Genesis DB: Add Connection` - Add a new database connection
-- `Genesis DB: Test Connection` - Test connection health
+- `GenesisDB: Add Connection` - Add a new database connection
+- `GenesisDB: Test Connection` - Test connection health
 
 ## Requirements
 
 - VS Code 1.80.0 or higher
-- Running Genesis DB
-- Network access to your Genesis DB instance
+- Running GenesisDB
+- Network access to your GenesisDB instance
 
 ## License
 
@@ -87,4 +87,4 @@ We welcome contributions! Please see our contributing guidelines and submit pull
 
 ---
 
-**Enjoy using Genesis DB with VS Code!**
+**Enjoy using GenesisDB with VS Code!**

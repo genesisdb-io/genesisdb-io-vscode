@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { ConnectionProvider, GenesisDBConnection } from './connectionProvider';
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Genesis DB extension is activating...');
+    console.log('GenesisDB extension is activating...');
 
     // Initialize connection provider
     const connectionProvider = new ConnectionProvider();
@@ -36,20 +36,20 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    console.log('Genesis DB extension activated successfully');
+    console.log('GenesisDB extension activated successfully');
 }
 
 async function addConnection(connectionProvider: ConnectionProvider) {
     try {
         const name = await vscode.window.showInputBox({
             prompt: 'Enter connection name',
-            placeHolder: 'My Genesis DB'
+            placeHolder: 'My GenesisDB'
         });
 
         if (!name) return;
 
         const url = await vscode.window.showInputBox({
-            prompt: 'Enter Genesis DB URL',
+            prompt: 'Enter GenesisDB URL',
             placeHolder: 'http://localhost:8080'
         });
 
@@ -188,7 +188,7 @@ async function openConnectionUI(connection: GenesisDBConnection, context: vscode
 
     const panel = vscode.window.createWebviewPanel(
         'genesisdb-ui',
-        `Genesis DB - ${connection.name}`,
+        `GenesisDB - ${connection.name}`,
         vscode.ViewColumn.One,
         {
             enableScripts: true,

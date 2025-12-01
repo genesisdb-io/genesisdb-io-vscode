@@ -1,8 +1,8 @@
 {
   "name": "genesisdb-vscode",
-  "displayName": "Genesis DB",
-  "description": "VS Code extension for Genesis DB event sourcing database",
-  "version": "1.0.3",
+  "displayName": "GenesisDB",
+  "description": "VS Code extension for GenesisDB event sourcing database",
+  "version": "1.0.4",
   "publisher": "patriceckhart",
   "repository": {
     "type": "git",
@@ -38,25 +38,25 @@
       {
         "command": "genesisdb.addConnection",
         "title": "Add Connection",
-        "category": "Genesis DB",
+        "category": "GenesisDB",
         "icon": "$(add)"
       },
       {
         "command": "genesisdb.removeConnection",
         "title": "Remove Connection",
-        "category": "Genesis DB",
+        "category": "GenesisDB",
         "icon": "$(trash)"
       },
       {
         "command": "genesisdb.testConnection",
         "title": "Test Connection",
-        "category": "Genesis DB",
+        "category": "GenesisDB",
         "icon": "$(pulse)"
       },
       {
         "command": "genesisdb.refreshConnections",
         "title": "Refresh Connections",
-        "category": "Genesis DB",
+        "category": "GenesisDB",
         "icon": "$(refresh)"
       }
     ],
@@ -73,7 +73,7 @@
       "activitybar": [
         {
           "id": "genesisdb-panel",
-          "title": "Genesis DB",
+          "title": "GenesisDB",
           "icon": "$(database)"
         }
       ]
@@ -115,11 +115,11 @@
       ]
     },
     "configuration": {
-      "title": "Genesis DB",
+      "title": "GenesisDB",
       "properties": {
         "genesisdb.connections": {
           "type": "array",
-          "description": "Genesis DB connection configurations",
+          "description": "GenesisDB connection configurations",
           "items": {
             "type": "object",
             "properties": {
@@ -129,7 +129,7 @@
               },
               "url": {
                 "type": "string",
-                "description": "Genesis DB server URL"
+                "description": "GenesisDB server URL"
               },
               "authToken": {
                 "type": "string",

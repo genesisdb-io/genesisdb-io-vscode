@@ -1,8 +1,13 @@
 # Change Log
 
-All notable changes to the Genesis DB VS Code extension will be documented in this file.
+All notable changes to the GenesisDB VS Code extension will be documented in this file.
 
-## [1.0.3] - 2025-10-2
+## [1.0.4] - 2025-12-01
+
+### Changed
+- Genesis DB is now GenesisDB
+
+## [1.0.3] - 2025-10-02
 
 ### Fixed
 - Shows ndjson instead of json in the output
@@ -22,7 +27,7 @@ All notable changes to the Genesis DB VS Code extension will be documented in th
 ## [1.0.0] - 2025-10-03
 
 ### Added
-- Initial release of Genesis DB VS Code Extension
+- Initial release of GenesisDB VS Code Extension
 - Complete connection management system with authentication
 - Integrations of an API client for testing and developing
 - Real-time event streaming
