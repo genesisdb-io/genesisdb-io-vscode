@@ -1,8 +1,8 @@
 {
   "name": "genesisdb-vscode",
   "displayName": "GenesisDB",
-  "description": "VS Code extension for GenesisDB event sourcing database",
-  "version": "1.0.4",
+  "description": "Explore GenesisDB, the open source event sourcing database, from VS Code: commit, fetch, query with GDBQL, schemas, erase and restore.",
+  "version": "2.0.0",
   "publisher": "patriceckhart",
   "repository": {
     "type": "git",
@@ -18,20 +18,14 @@
   ],
   "keywords": [
     "genesisdb",
-    "event store",
     "event sourcing",
-    "event sourcing database",
+    "event store",
+    "cloudevents",
     "gdbql",
+    "cqrs",
     "database"
   ],
-  "activationEvents": [
-    "onCommand:genesisdb.addConnection",
-    "onCommand:genesisdb.removeConnection",
-    "onCommand:genesisdb.testConnection",
-    "onCommand:genesisdb.refreshConnections",
-    "onCommand:genesisdb.openConnectionUI",
-    "onView:genesisdb-connections"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -58,6 +52,11 @@
         "title": "Refresh Connections",
         "category": "GenesisDB",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "genesisdb.openConnectionUI",
+        "title": "Open Explorer",
+        "category": "GenesisDB"
       }
     ],
     "views": {
@@ -111,6 +110,10 @@
         {
           "command": "genesisdb.testConnection",
           "when": "false"
+        },
+        {
+          "command": "genesisdb.openConnectionUI",
+          "when": "false"
         }
       ]
     },
@@ -129,11 +132,11 @@
               },
               "url": {
                 "type": "string",
-                "description": "GenesisDB server URL"
+                "description": "GenesisDB server URL, for example http://localhost:8080"
               },
               "authToken": {
                 "type": "string",
-                "description": "Authentication token"
+                "description": "Bearer token (GENESISDB_AUTH_TOKEN, or a reader or writer token)"
               }
             }
           },
@@ -143,7 +146,9 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run build",
+    "build": "npm run build:ui && npm run compile",
+    "build:ui": "cd genesisdb-io-ui && npm install --no-audit --no-fund && npm run build",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "package": "vsce package"
@@ -152,6 +157,6 @@
     "@types/vscode": "^1.80.0",
     "@types/node": "^18.0.0",
     "typescript": "^5.1.6",
-    "vsce": "^2.15.0"
+    "@vscode/vsce": "^3.2.0"
   }
 }

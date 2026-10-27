@@ -1,0 +1,28 @@
+name: Release
+
+# Triggered by hand. Publishes the version in package.json to the Visual Studio Marketplace and tags it.
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Tag
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$version" -m "v$version"
+          git push origin "v$version"
+      - run: npx @vscode/vsce publish --no-dependencies
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}

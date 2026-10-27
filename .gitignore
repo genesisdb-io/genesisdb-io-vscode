@@ -1,0 +1,6 @@
+node_modules/
+out/
+genesisdb-io-ui/node_modules/
+genesisdb-io-ui/dist/
+*.vsix
+.vscode-test/

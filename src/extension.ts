@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 import { ConnectionProvider, GenesisDBConnection } from './connectionProvider';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -142,7 +143,7 @@ async function testConnection(connectionOrItem: any): Promise<boolean> {
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
         try {
-            const pingUrl = `${connection.url.replace(/\/$/, '')}/api/v1/status/ping`;
+            const pingUrl = `${connection.url.replace(/\/+$/, '')}/ping`;
             const response = await fetch(pingUrl, {
                 method: 'GET',
                 signal: controller.signal
@@ -221,41 +222,34 @@ async function openConnectionUI(connection: GenesisDBConnection, context: vscode
             host: connection.url,
             authToken: connection.authToken
         })};
-            const vscode = acquireVsCodeApi();
-
-            // Simple message handler if React app needs to communicate
-            window.addEventListener('message', (event) => {
-                const message = event.data;
-                if (message.command === 'getConnection') {
-                    window.postMessage({
-                        command: 'setConnection',
-                        data: {
-                            name: ${JSON.stringify(connection.name)},
-                            host: ${JSON.stringify(connection.url)},
-                            authToken: ${JSON.stringify(connection.authToken)}
-                        }
-                    }, '*');
-                }
-            });
+            window.vscode = acquireVsCodeApi();
         </script>
         <script type="module"`
     );
 
     panel.webview.html = modifiedHtml;
 
-    // Handle messages from the React app (if needed)
+    // The webview talks to GenesisDB directly. The host only confirms destructive actions, loads backup files and saves output.
     panel.webview.onDidReceiveMessage(async (message) => {
-        // The React app handles everything itself
-        // We only provide connection info, no API proxying needed
-        if (message.command === 'getConnection' || message.command === 'getConnectionInfo') {
-            panel.webview.postMessage({
-                command: 'setConnection',
-                data: {
-                    name: connection.name,
-                    host: connection.url,
-                    authToken: connection.authToken
-                }
+        if (message?.command === 'confirm') {
+            const choice = await vscode.window.showWarningMessage(String(message.message), { modal: true }, 'Continue');
+            panel.webview.postMessage({ command: 'confirmed', id: message.id, ok: choice === 'Continue' });
+        } else if (message?.command === 'loadFile') {
+            const picked = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { JSON: ['json', 'ndjson'] }, openLabel: 'Load backup' });
+            if (picked?.[0]) {
+                const content = Buffer.from(await vscode.workspace.fs.readFile(picked[0])).toString('utf8');
+                panel.webview.postMessage({ command: 'fileLoaded', content });
+            }
+        } else if (message?.command === 'saveOutput') {
+            const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const target = await vscode.window.showSaveDialog({
+                defaultUri: vscode.Uri.file(path.join(os.homedir(), `genesisdb-${message.name}-${stamp}.json`)),
+                filters: { JSON: ['json', 'ndjson'] },
             });
+            if (target) {
+                await vscode.workspace.fs.writeFile(target, Buffer.from(String(message.content), 'utf8'));
+                vscode.window.showInformationMessage(`Saved to ${target.fsPath}`);
+            }
         }
     });
 }

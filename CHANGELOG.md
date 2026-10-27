@@ -2,6 +2,24 @@
 
 All notable changes to the GenesisDB VS Code extension will be documented in this file.
 
+## [2.0.0] - 2026-10-25
+
+Rewritten for GenesisDB 2.0. This release uses the 2.0 routes and is not meant for GenesisDB 1.x servers, keep 1.0.4 for those.
+
+### Changed
+- Connection check uses `/ping`.
+- Stream is now Fetch (`/api/v1/fetch`), Register Schema and Schemas use `/api/v1/schemas`, Restore uses `/api/v1/restore`.
+- Commit shows the stored events the server answers with.
+- Examples updated to the 2.0 schema subset and a precondition.
+
+### Added
+- Audit action.
+- Status line with HTTP status, duration and line count.
+- Description of each action with its route.
+- Confirmation before Erase and Restore.
+- Load a backup file into the Restore request, save any answer to a file.
+- Validation of the request body before sending.
+
 ## [1.0.4] - 2025-12-01
 
 ### Changed

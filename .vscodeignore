@@ -1,0 +1,16 @@
+.git/**
+.github/**
+src/**
+**/*.map
+**/tsconfig*.json
+genesisdb-io-ui/src/**
+genesisdb-io-ui/public/**
+genesisdb-io-ui/node_modules/**
+genesisdb-io-ui/*.json
+genesisdb-io-ui/*.ts
+genesisdb-io-ui/*.js
+genesisdb-io-ui/*.lock
+genesisdb-io-ui/index.html
+genesisdb-io-ui/README.md
+node_modules/**
+.gitignore
