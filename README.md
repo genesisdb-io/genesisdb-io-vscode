@@ -2,9 +2,9 @@
 
 Explore [GenesisDB](https://www.genesisdb.io), the open source event sourcing database, without leaving the editor. Manage connections, commit and fetch events, run GDBQL queries, register schemas, erase reference payloads and restore backups.
 
-> **Version 2.0.0 targets GenesisDB 2.0.** It uses the 2.0 routes (`/ping`, `/api/v1/fetch`, `/api/v1/schemas`, `/api/v1/restore` and others). For a GenesisDB 1.x server keep extension version 1.0.4.
+> **Version 2.0.0 targets GenesisDB 2.0.** It uses API v2 of GenesisDB 2.0 (`/api/v2/...`). For a GenesisDB 1.x server keep extension version 1.0.4.
 >
-> Extension 1.0.4 keeps working against a GenesisDB 2.0 server through deprecated route aliases, so you can upgrade the server first and the extension later. Audit needs this 2.0.0 extension.
+> Extension 1.0.4 keeps working against a GenesisDB 2.0 server, which still serves the unchanged 1.x API under `/api/v1`, so you can upgrade the server first and the extension later. Audit needs this 2.0.0 extension.
 
 ## Features
 
@@ -12,7 +12,7 @@ Explore [GenesisDB](https://www.genesisdb.io), the open source event sourcing da
 
 - Several connections side by side in the GenesisDB activity bar view
 - Bearer token authentication
-- Connection check against `/ping` before the explorer opens
+- Connection check against `/api/v2/ping` before the explorer opens, a GenesisDB 1.x server is reported as such
 
 ### Explorer
 
@@ -20,17 +20,17 @@ Every action has an editable example request and shows the HTTP status, duration
 
 | Action | Route | |
 |---|---|---|
-| Commit | `POST /api/v1/commit` | Commit events with optional preconditions, answers with the stored events |
-| Fetch | `POST /api/v1/fetch` | Events of a subject and its descendants, with optional bounds |
-| Query | `POST /api/v1/query` | Run a GDBQL query |
-| Subjects | `GET /api/v1/subjects` | Distinct top level subjects |
-| Types | `GET /api/v1/types` | Distinct event types |
-| Register Schema | `POST /api/v1/schemas` | Register a schema for an event type |
-| Schemas | `GET /api/v1/schemas` | Every registered schema |
-| Erase | `POST /api/v1/erase` | Erase the reference payloads below a subject |
-| Status | `GET /api/v1/status` | Engine, system, event counts and storage readiness |
-| Audit | `GET /api/v1/status/audit` | Verify the hash chain |
-| Restore | `POST /api/v1/restore` | Restore a backup file into an empty store, "Load file" reads it from disk |
+| Commit | `POST /api/v2/commit` | Commit events with optional preconditions, answers with the stored events |
+| Fetch | `POST /api/v2/fetch` | Events of a subject and its descendants, with optional bounds |
+| Query | `POST /api/v2/query` | Run a GDBQL query |
+| Subjects | `GET /api/v2/subjects` | Distinct top level subjects |
+| Types | `GET /api/v2/types` | Distinct event types |
+| Register Schema | `POST /api/v2/schemas` | Register a schema for an event type |
+| Schemas | `GET /api/v2/schemas` | Every registered schema |
+| Erase | `POST /api/v2/admin/erase` | Erase the reference payloads below a subject |
+| Status | `GET /api/v2/status` | Engine, system, event counts and storage readiness |
+| Audit | `GET /api/v2/admin/audit` | Verify the hash chain |
+| Restore | `POST /api/v2/admin/restore` | Restore a backup file into an empty store, "Load file" reads it from disk |
 
 Erase and Restore ask for confirmation before they are sent. Erase, Restore, Register Schema and Audit need the administrator token. Any answer can be saved to a file with "Save output".
 

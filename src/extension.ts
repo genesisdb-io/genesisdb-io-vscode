@@ -143,7 +143,8 @@ async function testConnection(connectionOrItem: any): Promise<boolean> {
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
         try {
-            const pingUrl = `${connection.url.replace(/\/+$/, '')}/ping`;
+            // /api/v2/ping only exists on GenesisDB 2, so it also detects a 1.x server.
+            const pingUrl = `${connection.url.replace(/\/+$/, '')}/api/v2/ping`;
             const response = await fetch(pingUrl, {
                 method: 'GET',
                 signal: controller.signal
@@ -154,6 +155,9 @@ async function testConnection(connectionOrItem: any): Promise<boolean> {
             if (response.ok) {
                 vscode.window.showInformationMessage(`Connection '${connection.name}' is reachable!`);
                 return true;
+            } else if (response.status === 404) {
+                vscode.window.showErrorMessage(`Connection '${connection.name}' is not a GenesisDB 2 server. Use extension version 1.0.4 for GenesisDB 1.x.`);
+                return false;
             } else {
                 vscode.window.showErrorMessage(`Connection '${connection.name}' returned status ${response.status}`);
                 return false;

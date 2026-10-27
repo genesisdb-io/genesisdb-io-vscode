@@ -7,8 +7,8 @@ All notable changes to the GenesisDB VS Code extension will be documented in thi
 Rewritten for GenesisDB 2.0. This release uses the 2.0 routes and is not meant for GenesisDB 1.x servers, keep 1.0.4 for those.
 
 ### Changed
-- Connection check uses `/ping`.
-- Stream is now Fetch (`/api/v1/fetch`), Register Schema and Schemas use `/api/v1/schemas`, Restore uses `/api/v1/restore`.
+- Connection check uses `/api/v2/ping` and reports a GenesisDB 1.x server as such.
+- Uses API v2: Stream is now Fetch (`/api/v2/fetch`), Register Schema and Schemas use `/api/v2/schemas`, Erase, Audit and Restore use `/api/v2/admin/...`.
 - Commit shows the stored events the server answers with.
 - Examples updated to the 2.0 schema subset and a precondition.
 
